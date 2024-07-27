@@ -17,7 +17,12 @@
       <span>导航3</span>
     </el-menu-item>
   </el-menu> -->
-  <m-menu :collapse="collapse" :data="data" router :defaultActive="$route.path"></m-menu>
+  <m-menu
+    :collapse="collapse"
+    :data="data"
+    router
+    :defaultActive="$route.path"
+  ></m-menu>
 </template>
 <script lang="ts" setup>
 const props = defineProps<{
@@ -25,32 +30,36 @@ const props = defineProps<{
 }>();
 const data = [
   {
-    icon:'HomeFilled',
-    name:'首页',
-    index:'/'
+    icon: "HomeFilled",
+    name: "首页",
+    index: "/",
   },
   {
-    icon: 'Check',
-    name: '图标选择器',
-    index: '/chooseIcon'
+    icon: "Check",
+    name: "图标选择器",
+    index: "/chooseIcon",
   },
   {
-    icon: 'Location',
-    name: '省市区选择器',
-    index: '/chooseArea'
+    icon: "Location",
+    name: "省市区选择器",
+    index: "/chooseArea",
   },
   {
-    icon: 'Sort',
-    name: '趋势标记',
-    index: '/trend'
-  }, {
-    icon: 'Menu',
-    name: '菜单',
-    index: '/menu'
+    icon: "Sort",
+    name: "趋势标记",
+    index: "/trend",
   },
- 
-]
+  {
+    icon: "Menu",
+    name: "菜单",
+    index: "/menu",
+  },
+  {
+    icon: "Histogram",
+    name: "甘特图",
+    index: "/gantt",
+  },
+];
 </script>
-<style lang="scss">
+<style lang="scss"></style>
 
-</style>

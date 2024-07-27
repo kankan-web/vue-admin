@@ -26,6 +26,10 @@ const routes: RouteRecordRaw[] = [
         path: "/menu",
         component: () => import("../view/menu/index.vue"),
       },
+      {
+        path: "/gantt",
+        component: () => import("../view/ganttChart/index.vue"),
+      },
     ],
   },
 ];
@@ -34,3 +38,4 @@ const router = createRouter({
   history: createWebHistory(),
 });
 export default router;
+
