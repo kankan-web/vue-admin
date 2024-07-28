@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="common-main">
     <mChooseArea @change="handleAreaChange"></mChooseArea>
   </div>
 </template>
@@ -8,4 +8,3 @@ const handleAreaChange = (value) => {
   console.log("value", value);
 };
 </script>
-

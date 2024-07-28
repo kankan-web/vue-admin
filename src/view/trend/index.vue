@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="common-main">
     <el-divider>正常趋势</el-divider>
     <div class="flex">
       <m-trend text="营业额"></m-trend>

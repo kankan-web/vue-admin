@@ -1,5 +1,7 @@
 <template>
-  <GanttComponent class="left-container" :tasks="tasks"></GanttComponent>
+  <div class="common-main">
+    <GanttComponent class="left-container" :tasks="tasks"></GanttComponent>
+  </div>
 </template>
 <script setup>
 import { ref } from "vue";
@@ -31,4 +33,3 @@ const tasks = ref({
   height: 100%;
 }
 </style>
-

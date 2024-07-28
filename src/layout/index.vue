@@ -27,5 +27,8 @@ const isCollapse = ref(false);
     padding: 0;
     border-bottom: 1px solid #ccc;
   }
+  .el-main {
+    padding: 0;
+  }
 }
 </style>
