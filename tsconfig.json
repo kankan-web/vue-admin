@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -20,9 +22,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    
+
     "noImplicitAny": false, // 是否在表达式和声明上有隐含的any类型时报错
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
+

@@ -22,8 +22,7 @@
 </template>
 <script lang="ts" setup>
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
-import { defineProps, ref, watch } from "vue";
-import { useCopy } from "../../../hooks/useCopy";
+import { useCopy } from "@/hooks/useCopy";
 const props = defineProps<{
   // 弹出框的标题
   title: string;
@@ -98,3 +97,4 @@ watch(
   }
 }
 </style>
+

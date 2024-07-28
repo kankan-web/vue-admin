@@ -37,8 +37,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, watch } from "vue";
-import allAreas from "../lib/pca-code.json";
+import allAreas from "./lib/pca-code.json";
 export interface AreaItem {
   name: string;
   code: string;
@@ -118,3 +117,4 @@ watch(
   }
 }
 </style>
+

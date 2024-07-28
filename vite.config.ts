@@ -1,9 +1,52 @@
+/**
+ * 关于ElementPlus按需加载的配置可以参考：
+ * https://github.dev/sxzz/element-plus-best-practices
+ */
+
 import { defineConfig } from "vite";
+import path from "path";
+
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
+
+//Element plus按需引入
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+
+const pathSrc = path.resolve(__dirname, "src");
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx()],
+  //设置别名
+  resolve: {
+    alias: {
+      "@": pathSrc,
+    },
+  },
+  plugins: [
+    vue(),
+    vueJsx(),
+    AutoImport({
+      //自动导入Vue相关函数，如：ref，reactive，toRef等
+      imports: ["vue"],
+      //自动导入目录下的模块出口,默认情况下只扫描目录下的一级模块
+      dirs: [path.resolve(pathSrc, "./components/**")],
+      //自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
+      resolvers: [ElementPlusResolver()],
+      //自动导入 Vue 模板
+      vueTemplate: true,
+      //指定生成的类型声明文件的路径
+      dts: path.resolve(pathSrc, "typings", "auto-imports.d.ts"),
+    }),
+    Components({
+      dirs: [path.resolve(pathSrc, "./components/**")],
+      resolvers: [
+        //自动导入Element Plus 组件
+        ElementPlusResolver(),
+      ],
+      dts: path.resolve(pathSrc, "typings", "components.d.ts"),
+    }),
+  ],
   server: {
     port: 8080,
   },

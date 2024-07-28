@@ -31,7 +31,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, useSlots, computed } from "vue";
 let props = defineProps({
   //标记当前趋势是上升up还是下降down
   type: {
@@ -104,3 +103,4 @@ let textColor = computed(() => {
   }
 }
 </style>
+

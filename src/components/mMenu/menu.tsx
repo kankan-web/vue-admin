@@ -1,4 +1,4 @@
-import { defineComponent, PropType, render, useAttrs } from "vue";
+import { defineComponent, PropType, useAttrs } from "vue";
 import { MenuItem } from "./type";
 export default defineComponent({
   props: {
