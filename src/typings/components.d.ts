@@ -27,6 +27,7 @@ declare module 'vue' {
     MChooseArea: typeof import('./../components/mChooseArea/index.vue')['default']
     MChooseIcon: typeof import('./../components/mChooseIcon/index.vue')['default']
     MMenu: typeof import('./../components/mMenu/index.vue')['default']
+    MSvgIcon: typeof import('./../components/mSvgIcon/index.vue')['default']
     MTrend: typeof import('./../components/mTrend/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
