@@ -17,6 +17,7 @@
     "echarts": "^5.5.1",
     "element-plus": "^2.5.3",
     "pinia": "^2.2.0",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.3.11",
     "vue-router": "^4.0.13"
   },
