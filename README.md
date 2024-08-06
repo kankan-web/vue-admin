@@ -6,6 +6,9 @@
 - pnpm install
 - pnpm run dev
 
+## 关键依赖
+1. 图标使用iconfy
+
 # 测试 Action
 
 # Git提交规范

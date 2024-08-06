@@ -12,6 +12,9 @@ import "./style/base.scss";
 //引入element plus样式
 import "element-plus/dist/index.css";
 
+//导入icons
+import "virtual:svg-icons-register";
+
 const app = createApp(App);
 app.use(router);
 // app.use(mUI);

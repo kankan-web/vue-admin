@@ -14,7 +14,10 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
-const pathSrc = path.resolve(__dirname, "src");
+//SVG 图标目前使用 vite-plugin-svg-icons 插件完成，官方文档请查看 ：https://github.com/vbenjs/vite-plugin-svg-icons
+import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
+
+const pathSrc = path.resolve(__dirname, "./src");
 // https://vitejs.dev/config/
 export default defineConfig({
   //设置别名
@@ -46,6 +49,10 @@ export default defineConfig({
       ],
       dts: path.resolve(pathSrc, "typings", "components.d.ts"),
     }),
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), "src/assets/icons/svg")],
+      symbolId: "icon-[name]",
+    }),
   ],
   server: {
     port: 8080,
@@ -54,4 +61,3 @@ export default defineConfig({
     include: ["dhtmlx-gantt"],
   },
 });
-
