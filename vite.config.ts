@@ -17,7 +17,11 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 //SVG 图标目前使用 vite-plugin-svg-icons 插件完成，官方文档请查看 ：https://github.com/vbenjs/vite-plugin-svg-icons
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 
+//mock vite-plugin-mock
+import { viteMockServe } from "vite-plugin-mock";
+
 const pathSrc = path.resolve(__dirname, "./src");
+
 // https://vitejs.dev/config/
 export default defineConfig({
   //设置别名
@@ -25,6 +29,13 @@ export default defineConfig({
     alias: {
       "@": pathSrc,
     },
+  },
+  //服务端渲染
+  server:{
+    port:8080,
+    host:'0.0.0.0',
+    //本地跨域代理：https://cn.vitejs.dev/config/server-options.html#server-proxy
+    proxy:{},
   },
   plugins: [
     vue(),
@@ -53,10 +64,10 @@ export default defineConfig({
       iconDirs: [path.resolve(process.cwd(), "src/assets/icons/svg")],
       symbolId: "icon-[name]",
     }),
+    viteMockServe({
+      mockPath: "./mock",
+    }),
   ],
-  server: {
-    port: 8080,
-  },
   optimizeDeps: {
     include: ["dhtmlx-gantt"],
   },
