@@ -58,7 +58,6 @@ let props = defineProps({
     default: false,
   },
 });
-console.log(props.data);
 </script>
 <style lang="scss" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {

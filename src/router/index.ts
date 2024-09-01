@@ -1,10 +1,15 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../view/home/Home.vue";
-import LayOut from "../layout/index.vue";
+import Home from "@/view/home/index.vue";
+import Layout from "@/layout/index.vue";
 const routes: RouteRecordRaw[] = [
   {
+    path: "/login",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "@/view/login/index.vue"),
+  },
+  {
     path: "/",
-    component: LayOut,
+    component: Layout,
     children: [
       {
         path: "/",
@@ -12,23 +17,23 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "/chooseIcon",
-        component: () => import("../view/chooseIcon/index.vue"),
+        component: () => import("@/view/chooseIcon/index.vue"),
       },
       {
         path: "/chooseArea",
-        component: () => import("../view/chooseArea/index.vue"),
+        component: () => import("@/view/chooseArea/index.vue"),
       },
       {
         path: "/trend",
-        component: () => import("../view/trend/index.vue"),
+        component: () => import("@/view/trend/index.vue"),
       },
       {
         path: "/menu",
-        component: () => import("../view/menu/index.vue"),
+        component: () => import("@/view/menu/index.vue"),
       },
       {
         path: "/gantt",
-        component: () => import("../view/ganttChart/index.vue"),
+        component: () => import("@/view/ganttChart/index.vue"),
       },
     ],
   },
@@ -38,4 +43,3 @@ const router = createRouter({
   history: createWebHistory(),
 });
 export default router;
-
