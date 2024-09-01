@@ -24,11 +24,14 @@ const isCollapse = ref(false);
 <style lang="scss">
 .el-container {
   .el-header {
+    height: 55px;
     padding: 0;
     border-bottom: 1px solid #ccc;
   }
   .el-main {
-    padding: 0;
+    padding: 10px 12px;
+    overflow-x: hidden;
+    background-color: var(--el-bg-color-page);
   }
 }
 </style>

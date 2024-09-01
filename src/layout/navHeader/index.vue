@@ -18,7 +18,7 @@ const toggle = () => {
 </script>
 <style lang="scss">
 .header {
-  height: 60px;
+  height: 55px;
   padding-left: 20px;
   display: flex;
   align-items: center;

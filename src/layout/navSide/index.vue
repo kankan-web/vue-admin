@@ -59,6 +59,11 @@ const data = [
     name: "甘特图",
     index: "/gantt",
   },
+  {
+    icon:"Cpu",
+    name:'超级表格',
+    index:'/table'
+  }
 ];
 </script>
 <style lang="scss"></style>

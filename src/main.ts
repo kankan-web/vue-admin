@@ -13,8 +13,8 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import "./style/reset.scss";
 // 引入基础样式
 import "./style/base.scss";
-//引入element plus样式
-import "element-plus/dist/index.css";
+// custom element css
+import "@/style/element.scss";
 
 //导入icons
 import "virtual:svg-icons-register";

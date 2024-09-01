@@ -24,10 +24,13 @@ declare module 'vue' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElRow: typeof import('element-plus/es')['ElRow']
+    ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTr: typeof import('element-plus/es')['ElTr']
+    ElTree: typeof import('element-plus/es')['ElTree']
     MChooseArea: typeof import('./../components/mChooseArea/index.vue')['default']
     MChooseIcon: typeof import('./../components/mChooseIcon/index.vue')['default']
     MMenu: typeof import('./../components/mMenu/index.vue')['default']
@@ -37,5 +40,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Src: typeof import('../components/mMenu/src/index.vue')['default']
     SvgIcon: typeof import('./../components/SvgIcon/index.vue')['default']
+    TreeFilter: typeof import('./../components/treeFilter/index.vue')['default']
   }
 }

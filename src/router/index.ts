@@ -35,6 +35,10 @@ const routes: RouteRecordRaw[] = [
         path: "/gantt",
         component: () => import("@/view/ganttChart/index.vue"),
       },
+      {
+        path:'/table',
+        component:()=>import("@/view/proTable/index.vue")
+      }
     ],
   },
 ];
