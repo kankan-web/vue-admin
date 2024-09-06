@@ -9,7 +9,10 @@
         @change="changeTreeFilter"
       />
     </div>
-    <div class="table-box"></div>
+    <div class="table-box">
+
+      <mTable></mTable>
+    </div>
   </div>
 </template>
 <script setup lang="ts">

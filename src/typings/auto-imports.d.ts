@@ -6,7 +6,17 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
+  const ElDatePickerPanel: typeof import('element-plus/es')['ElDatePickerPanel']
+  const ElDateTimePicker: typeof import('element-plus/es')['ElDateTimePicker']
+  const ElInput: typeof import('element-plus/es')['ElInput']
   const ElMessage: typeof import('element-plus/es')['ElMessage']
+  const ElOption: typeof import('element-plus/es')['ElOption']
+  const ElSelect: typeof import('element-plus/es')['ElSelect']
+  const ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
+  const ElTimeSelect: typeof import('element-plus/es')['ElTimeSelect']
+  const Gird: typeof import('../components/Gird/index.vue')['default']
+  const GirdItem: typeof import('../components/Gird/components/GirdItem.vue')['default']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
   const customRef: typeof import('vue')['customRef']
@@ -22,6 +32,7 @@ declare global {
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
   const mCol: typeof import('../components/mCol/index')['default']
+  const mTable: typeof import('../components/mTable/index.vue')['default']
   const markRaw: typeof import('vue')['markRaw']
   const menu: typeof import('../components/mMenu/menu')['default']
   const nextTick: typeof import('vue')['nextTick']
@@ -43,6 +54,7 @@ declare global {
   const readonly: typeof import('vue')['readonly']
   const ref: typeof import('vue')['ref']
   const resolveComponent: typeof import('vue')['resolveComponent']
+  const searchFormItem: typeof import('../components/mForm/index.vue')['default']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
@@ -73,6 +85,10 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly ElDatePicker: UnwrapRef<typeof import('element-plus/es')['ElDatePicker']>
+    readonly ElInput: UnwrapRef<typeof import('element-plus/es')['ElInput']>
+    readonly ElOption: UnwrapRef<typeof import('element-plus/es')['ElOption']>
+    readonly ElSelect: UnwrapRef<typeof import('element-plus/es')['ElSelect']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
@@ -132,6 +148,10 @@ declare module '@vue/runtime-core' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly ElDatePicker: UnwrapRef<typeof import('element-plus/es')['ElDatePicker']>
+    readonly ElInput: UnwrapRef<typeof import('element-plus/es')['ElInput']>
+    readonly ElOption: UnwrapRef<typeof import('element-plus/es')['ElOption']>
+    readonly ElSelect: UnwrapRef<typeof import('element-plus/es')['ElSelect']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
