@@ -41,6 +41,7 @@ declare module 'vue' {
     MChooseArea: typeof import('./../components/mChooseArea/index.vue')['default']
     MChooseIcon: typeof import('./../components/mChooseIcon/index.vue')['default']
     MForm: typeof import('./../components/mForm/index.vue')['default']
+    MLoading: typeof import('./../components/mLoading/index.vue')['default']
     mMenu: typeof import('../components/mMenu/index.vue')['default']
     MMenu: typeof import('./../components/mMenu/index.vue')['default']
     MSvgIcon: typeof import('./../components/mSvgIcon/index.vue')['default']
