@@ -63,8 +63,12 @@ const data = [
     icon:"Cpu",
     name:'超级表格',
     index:'/table'
-  }
+  },
+  {
+    icon: "Cpu",
+    name: "虚拟表格",
+    index: "/virtualTable",
+  },
 ];
 </script>
 <style lang="scss"></style>
-

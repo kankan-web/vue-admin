@@ -38,7 +38,11 @@ const routes: RouteRecordRaw[] = [
       {
         path:'/table',
         component:()=>import("@/view/proTable/index.vue")
-      }
+      },
+      {
+        path: "/virtualTable",
+        component: () => import("@/view/vTable/index.vue"),
+      },
     ],
   },
 ];
