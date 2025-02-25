@@ -1,53 +1,55 @@
 //按需引入echarts
-import * as echarts from "echarts/core";
-import { BarChart, LineChart } from "echarts/charts";
+import * as echarts from 'echarts/core'
+
+// 引入图表
+import { BarChart, LineChart, type BarSeriesOption, type LineSeriesOption } from 'echarts/charts'
+
+// 引入组件
 import {
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  // 数据集组件
-  DatasetComponent,
-  // 内置数据转换器组件 (filter, sort)
-  TransformComponent,
-} from "echarts/components";
+	TitleComponent,
+	TooltipComponent,
+	GridComponent,
+	DatasetComponent,
+	TransformComponent,
+	type TitleComponentOption,
+	type TooltipComponentOption,
+	type GridComponentOption,
+	type DatasetComponentOption
+} from 'echarts/components'
 
-import { LabelLayout, UniversalTransition } from "echarts/features";
-import { CanvasRenderer } from "echarts/renderers";
-import type {
-  // 系列类型的定义后缀都为 SeriesOption
-  BarSeriesOption,
-  LineSeriesOption,
-} from "echarts/charts";
-import type {
-  // 组件类型的定义后缀都为 ComponentOption
-  TitleComponentOption,
-  TooltipComponentOption,
-  GridComponentOption,
-  DatasetComponentOption,
-} from "echarts/components";
-import type { ComposeOption } from "echarts/core";
+// 引入特性
+import { LabelLayout, UniversalTransition } from 'echarts/features'
 
-// 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
-type ECOption = ComposeOption<
-  | BarSeriesOption
-  | LineSeriesOption
-  | TitleComponentOption
-  | TooltipComponentOption
-  | GridComponentOption
-  | DatasetComponentOption
->;
+// 引入渲染器
+import { CanvasRenderer } from 'echarts/renderers'
+
+// 组合 Option 类型
+export type ECOption = echarts.ComposeOption<
+	| BarSeriesOption
+	| LineSeriesOption
+	| TitleComponentOption
+	| TooltipComponentOption
+	| GridComponentOption
+	| DatasetComponentOption
+>
+
 // 注册必须的组件
-echarts.use([
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  DatasetComponent,
-  TransformComponent,
-  BarChart,
-  LineChart,
-  LabelLayout,
-  UniversalTransition,
-  CanvasRenderer,
-]);
+const components = [
+	BarChart,
+	LineChart,
+	TitleComponent,
+	TooltipComponent,
+	GridComponent,
+	DatasetComponent,
+	TransformComponent,
+	LabelLayout,
+	UniversalTransition,
+	CanvasRenderer
+]
 
-export default echarts;
+echarts.use(components)
+
+// 导出 echarts 实例和类型
+export type EChartsType = echarts.EChartsType
+export { echarts }
+export default echarts
