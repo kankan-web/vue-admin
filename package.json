@@ -4,11 +4,12 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
-		"build": "vue-tsc && vite build",
-		"preview": "vite preview",
+		"dev": "vite --config scripts/config/vite.config.ts",
+		"build": "vite build --config scripts/config/vite.config.ts",
+		"preview": "vite preview --config scripts/config/vite.config.ts",
 		"commit": "git-cz",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"lint": "eslint --config eslint.config.js"
 	},
 	"dependencies": {
 		"@element-plus/icons-vue": "^2.3.1",
