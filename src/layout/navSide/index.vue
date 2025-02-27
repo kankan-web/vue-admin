@@ -1,22 +1,4 @@
 <template>
-	<!-- <el-menu
-    :collapse="collapse"
-    default-active="2"
-    class="el-menu-vertical-demo"
-  >
-    <el-menu-item index="1">
-      <el-icon><setting /></el-icon>
-      <span>导航1</span>
-    </el-menu-item>
-    <el-menu-item index="2">
-      <el-icon><setting /></el-icon>
-      <span>导航2</span>
-    </el-menu-item>
-    <el-menu-item index="3">
-      <el-icon><setting /></el-icon>
-      <span>导航3</span>
-    </el-menu-item>
-  </el-menu> -->
 	<m-menu :collapse="collapse" :data="data" router :defaultActive="$route.path"></m-menu>
 </template>
 <script lang="ts" setup>
@@ -48,11 +30,6 @@ const data = [
 		icon: 'Menu',
 		name: '菜单',
 		index: '/menu'
-	},
-	{
-		icon: 'Histogram',
-		name: '甘特图',
-		index: '/gantt'
 	},
 	{
 		icon: 'Cpu',

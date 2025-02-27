@@ -17,9 +17,6 @@ importers:
       axios:
         specifier: ^1.7.2
         version: 1.7.2
-      dhtmlx-gantt:
-        specifier: ^8.0.7
-        version: 8.0.7
       echarts:
         specifier: ^5.5.1
         version: 5.5.1
@@ -1429,9 +1426,6 @@ packages:
   detect-indent@6.1.0:
     resolution: {integrity: sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==}
     engines: {node: '>=8'}
-
-  dhtmlx-gantt@8.0.7:
-    resolution: {integrity: sha512-O1zyIujcP6Ig6LTF1JKtadDC+6NUklLAlhZTaKHqiAJeQpSVVCO8oCqDTUORU+OVzsAN+b6qSwPBtPrKlGJ5qQ==}
 
   dom-serializer@0.2.2:
     resolution: {integrity: sha512-2/xPb3ORsQ42nHYiSunXkDjPLBaEj/xTwUO4B7XCZQTRk7EBtTOPaygh10YAAh2OI1Qrp6NWfpAhzswj0ydt9g==}
@@ -4913,8 +4907,6 @@ snapshots:
   detect-file@1.0.0: {}
 
   detect-indent@6.1.0: {}
-
-  dhtmlx-gantt@8.0.7: {}
 
   dom-serializer@0.2.2:
     dependencies:
