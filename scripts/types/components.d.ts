@@ -36,6 +36,7 @@ declare module 'vue' {
     MForm: typeof import('./../../src/components/mForm/index.vue')['default']
     MLoading: typeof import('./../../src/components/mLoading/index.vue')['default']
     MMenu: typeof import('./../../src/components/mMenu/index.vue')['default']
+    MTable: typeof import('./../../src/components/mTable/index.vue')['default']
     MTrend: typeof import('./../../src/components/mTrend/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
