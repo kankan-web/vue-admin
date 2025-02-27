@@ -6,5 +6,5 @@
 		"moduleResolution": "Node",
 		"allowSyntheticDefaultImports": true
 	},
-	"include": ["scripts/config/vite.config.ts", "scripts/utils/index.ts"]
+	"include": ["scripts/config/vite.config.ts", "scripts/utils/index.ts", "mock/index.ts"]
 }

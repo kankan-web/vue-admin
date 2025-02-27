@@ -29,6 +29,12 @@
 			"@/*": ["src/*"]
 		}
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/types/**/*.d.ts", "auto-imports.d.ts"],
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/*.vue",
+		"scripts/typings/auto-imports.d.ts",
+		"scripts/typings/components.d.ts"
+	],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

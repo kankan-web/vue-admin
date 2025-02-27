@@ -29,11 +29,12 @@ const __dirname = dirname(__filename)
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, root, '../env')
+	const isDev = mode === 'development'
 	return {
 		base: env.VITE_BASE_URL,
 		//服务端渲染
 		server: {
-			port: 8080,
+			port: 4000,
 			host: '0.0.0.0',
 			//本地跨域代理：https://cn.vitejs.dev/config/server-options.html#server-proxy
 			proxy: {}
@@ -86,34 +87,38 @@ export default defineConfig(({ mode }) => {
 				//自动导入Vue相关函数，如：ref，reactive，toRef等
 				imports: ['vue'],
 				//自动导入目录下的模块出口,默认情况下只扫描目录下的一级模块
-				dirs: [pathResolve('components/**')],
+				dirs: ['src/components'],
 				//自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
 				resolvers: [ElementPlusResolver()],
 				//自动导入 Vue 模板
 				vueTemplate: true,
 				//指定生成的类型声明文件的路径
-				dts: pathResolve('../typings/auto-imports.d.ts')
+				dts: pathResolve('../types/auto-imports.d.ts')
 			}),
 			//自动导入Vue组件
 			Components({
 				// eslintrc: {
 				// 	enabled: true,
 				// 	filepath: './.eslintrc-components.json'
-				// },
-				dirs: [pathResolve('components/**')],
+				// }
+				dirs: ['src/components'],
 				resolvers: [
 					//自动导入Element Plus 组件
 					ElementPlusResolver()
 				],
-				dts: pathResolve('../typings/components.d.ts')
+				dts: pathResolve('../types/components.d.ts')
 			}),
 			createSvgIconsPlugin({
 				iconDirs: [pathResolve('src/assets/svg')],
 				symbolId: 'icon-[name]'
 			}),
-			viteMockServe({
-				mockPath: './mock'
-			})
+			isDev &&
+				viteMockServe({
+					mockPath: 'mock', //mock文件路径
+					enable: true, //是否启用
+					watchFiles: true, //是否监听文件
+					logger: true //是否打印日志
+				})
 		],
 		css: {
 			// 开启 CSS source maps
