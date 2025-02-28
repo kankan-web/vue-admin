@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "vue-admin",
   description: "后台管理基础框架",
+  base: '/vue-admin/',  // 替换为你的GitHub仓库名称
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
