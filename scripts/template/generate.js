@@ -1,14 +1,24 @@
 #!/usr/bin/env node
 
 /**
- * Vue 模块生成器
+ * 生成模块
+ * @param {string} name 模块名称
+ * @param {object} options 选项
+ * @param {string} options.directory 生成目录
+ * @param {string} options.type 生成类型
+ * @example
+ * # 生成所有类型的模块，使用默认目录
+ * node scripts/template/generate.js -n UserManagement
+ * # 指定生成目录
+ * node scripts/template/generate.js -n UserManagement -d src/modules
+ * # 只生成视图和API
+ * node scripts/template/generate.js -n UserManagement -t view
+ * node scripts/template/generate.js -n UserManagement -t api
+ * # 只生成路由
+ * node scripts/template/generate.js -n UserManagement -t router
+ * # 指定目录和类型
+ * node scripts/template/generate.js -n UserManagement -d custom/path -t store
  *
- * 优化内容：
- * 1. 修复了模板文件路径问题，确保正确导入模板
- * 2. 修复了项目根目录路径，确保生成的文件位于正确位置
- * 3. 使用动态导入 chalk 模块，解决 ESM 兼容性问题
- * 4. 将模板文件扩展名改为 .cjs，确保在 ESM 项目中能正确导入
- * 5. 修复 inquirer 导入问题，使用兼容的方式导入
  */
 
 import fs from 'fs-extra'
@@ -32,52 +42,86 @@ const __dirname = path.dirname(__filename)
 // 项目根目录
 const PROJECT_ROOT = path.resolve(__dirname, '../..')
 
-// 各模块路径
-const PATHS = {
+// 默认各模块路径
+const DEFAULT_PATHS = {
 	views: path.join(PROJECT_ROOT, 'src/view'),
 	router: path.join(PROJECT_ROOT, 'src/router/modules'),
 	store: path.join(PROJECT_ROOT, 'src/stores/modules'),
 	api: path.join(PROJECT_ROOT, 'src/api')
 }
 
-// 确保目录存在
-Object.values(PATHS).forEach(dir => {
-	fs.ensureDirSync(dir)
-})
+// 模板类型
+const TEMPLATE_TYPES = ['all', 'view', 'router', 'store', 'api']
 
 // 首字母大写
 const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1)
 
 // 生成模块
-async function generateModule(name) {
+async function generateModule(name, options) {
 	const moduleName = capitalize(name)
+	const { directory, type } = options
+
+	// 根据用户指定的目录创建自定义路径
+	const PATHS = { ...DEFAULT_PATHS }
+
+	if (directory) {
+		const customDir = path.join(PROJECT_ROOT, directory)
+		PATHS.views = path.join(customDir, 'view')
+		PATHS.router = path.join(customDir, 'router/modules')
+		PATHS.store = path.join(customDir, 'stores/modules')
+		PATHS.api = path.join(customDir, 'api')
+	}
+
+	// 确保目录存在
+	Object.values(PATHS).forEach(dir => {
+		fs.ensureDirSync(dir)
+	})
 
 	console.log(chalk.blue(`开始生成 ${moduleName} 模块...`))
+	console.log(chalk.blue(`生成目录: ${directory || 'src'}`))
+	console.log(chalk.blue(`生成类型: ${type || 'all'}`))
 
 	try {
+		// 根据类型生成对应文件
+		const shouldGenerateAll = type === 'all' || !type
+
 		// 创建视图文件
-		const viewDir = path.join(PROJECT_ROOT, 'src/view', moduleName)
-		fs.ensureDirSync(viewDir)
-		fs.writeFileSync(path.join(viewDir, `index.vue`), viewTemplate(moduleName))
-		console.log(chalk.green(`✓ 视图文件已创建: src/view/${moduleName}/index.vue`))
+		if (shouldGenerateAll || type === 'view') {
+			const viewDir = path.join(PATHS.views, moduleName)
+			fs.ensureDirSync(viewDir)
+			fs.writeFileSync(path.join(viewDir, `index.vue`), viewTemplate(moduleName))
+			console.log(chalk.green(`✓ 视图文件已创建: ${path.relative(PROJECT_ROOT, viewDir)}/index.vue`))
+		}
 
 		// 创建路由文件
-		fs.writeFileSync(path.join(PATHS.router, `${name.toLowerCase()}.ts`), routerTemplate(moduleName))
-		console.log(chalk.green(`✓ 路由文件已创建: src/router/modules/${name.toLowerCase()}.ts`))
+		if (shouldGenerateAll || type === 'router') {
+			fs.writeFileSync(path.join(PATHS.router, `${name.toLowerCase()}.ts`), routerTemplate(moduleName))
+			console.log(chalk.green(`✓ 路由文件已创建: ${path.relative(PROJECT_ROOT, PATHS.router)}/${name.toLowerCase()}.ts`))
+		}
 
 		// 创建 Store 文件
-		fs.writeFileSync(path.join(PATHS.store, `${name.toLowerCase()}.ts`), storeTemplate(moduleName))
-		console.log(chalk.green(`✓ Store 文件已创建: src/stores/modules/${name.toLowerCase()}.ts`))
+		if (shouldGenerateAll || type === 'store') {
+			fs.writeFileSync(path.join(PATHS.store, `${name.toLowerCase()}.ts`), storeTemplate(moduleName))
+			console.log(chalk.green(`✓ Store 文件已创建: ${path.relative(PROJECT_ROOT, PATHS.store)}/${name.toLowerCase()}.ts`))
+		}
 
 		// 创建 API 文件
-		fs.writeFileSync(path.join(PATHS.api, `${name.toLowerCase()}.ts`), apiTemplate(moduleName))
-		console.log(chalk.green(`✓ API 文件已创建: src/api/${name.toLowerCase()}.ts`))
+		if (shouldGenerateAll || type === 'api') {
+			fs.writeFileSync(path.join(PATHS.api, `${name.toLowerCase()}.ts`), apiTemplate(moduleName))
+			console.log(chalk.green(`✓ API 文件已创建: ${path.relative(PROJECT_ROOT, PATHS.api)}/${name.toLowerCase()}.ts`))
+		}
 
-		// 更新路由主文件，自动导入新模块
-		updateRouterIndex(name.toLowerCase())
+		// 只有在生成全部或路由时才更新路由主文件
+		if (shouldGenerateAll || type === 'router') {
+			// 更新路由主文件，自动导入新模块
+			updateRouterIndex(name.toLowerCase(), directory)
+		}
 
-		// 更新 Store 主文件，自动导入新模块
-		updateStoreIndex(name.toLowerCase(), moduleName)
+		// 只有在生成全部或store时才更新Store主文件
+		if (shouldGenerateAll || type === 'store') {
+			// 更新 Store 主文件，自动导入新模块
+			updateStoreIndex(name.toLowerCase(), directory)
+		}
 
 		console.log(chalk.green.bold(`\n✅ ${moduleName} 模块创建成功！`))
 		console.log(chalk.yellow(`提示: 请检查路由和 Store 的主文件，确保模块已正确导入`))
@@ -87,11 +131,14 @@ async function generateModule(name) {
 }
 
 // 更新路由主文件
-function updateRouterIndex(moduleName) {
-	const routerIndexPath = path.join(PROJECT_ROOT, 'src/router/index.ts')
+function updateRouterIndex(moduleName, directory) {
+	const routerDir = directory ? path.join(PROJECT_ROOT, directory, 'router') : path.join(PROJECT_ROOT, 'src/router')
+	const routerIndexPath = path.join(routerDir, 'index.ts')
 
 	if (!fs.existsSync(routerIndexPath)) {
-		console.log(chalk.yellow(`⚠️ 未找到路由主文件，请手动导入路由模块: src/router/modules/${moduleName}.ts`))
+		console.log(
+			chalk.yellow(`⚠️ 未找到路由主文件，请手动导入路由模块: ${path.relative(PROJECT_ROOT, routerDir)}/modules/${moduleName}.ts`)
+		)
 		return
 	}
 
@@ -112,11 +159,11 @@ function updateRouterIndex(moduleName) {
 		}
 
 		// 找到该行末尾
-		const lineEndIndex = content.indexOf('\n', importEndIndex)
-		const importStatement = ``
+		// const lineEndIndex = content.indexOf('\n', importEndIndex)
+		// const importStatement = `import ${moduleName}Routes from './modules/${moduleName}'\n`
 
 		// 插入导入语句
-		content = content.slice(0, lineEndIndex + 1) + importStatement + content.slice(lineEndIndex + 1)
+		// content = content.slice(0, lineEndIndex + 1) + importStatement + content.slice(lineEndIndex + 1)
 
 		// 查找路由数组
 		const routesMatch = content.match(/const\s+routes\s*:\s*RouteRecordRaw\[\]\s*=\s*\[([\s\S]*?)\]/m)
@@ -137,11 +184,11 @@ function updateRouterIndex(moduleName) {
 		const routeEntry = content.slice(layoutMatch.index, childrenEndIndex).trim().endsWith(',')
 			? `			{
 				path: '/${moduleName}',
-				component: () => import('@/view/${moduleName}/index.vue')
+				component: () => import('@/view/${capitalize(moduleName)}/index.vue')
 			}\n`
 			: `			,{
 				path: '/${moduleName}',
-				component: () => import('@/view/${moduleName}/index.vue')
+				component: () => import('@/view/${capitalize(moduleName)}/index.vue')
 			}\n`
 
 		content = content.slice(0, childrenEndIndex) + routeEntry + content.slice(childrenEndIndex)
@@ -154,11 +201,16 @@ function updateRouterIndex(moduleName) {
 }
 
 // 更新 Store 主文件
-function updateStoreIndex(moduleName, capitalizedName) {
-	const storeIndexPath = path.join(PROJECT_ROOT, 'src/stores/index.ts')
+function updateStoreIndex(moduleName, directory) {
+	const storeDir = directory ? path.join(PROJECT_ROOT, directory, 'stores') : path.join(PROJECT_ROOT, 'src/stores')
+	const storeIndexPath = path.join(storeDir, 'index.ts')
 
 	if (!fs.existsSync(storeIndexPath)) {
-		console.log(chalk.yellow(`⚠️ 未找到 Store 主文件，请手动导出 Store 模块: src/stores/modules/${moduleName}.ts`))
+		console.log(
+			chalk.yellow(
+				`⚠️ 未找到 Store 主文件，请手动导出 Store 模块: ${path.relative(PROJECT_ROOT, storeDir)}/modules/${moduleName}.ts`
+			)
+		)
 		return
 	}
 
@@ -179,11 +231,11 @@ function updateStoreIndex(moduleName, capitalizedName) {
 		}
 
 		// 找到该行末尾
-		const lineEndIndex = content.indexOf('\n', lastExportIndex)
-		const exportStatement = ``
+		// const lineEndIndex = content.indexOf('\n', lastExportIndex)
+		// const exportStatement = `export { use${capitalize(moduleName)}Store } from './modules/${moduleName}'\n`
 
 		// 插入导出语句
-		content = content.slice(0, lineEndIndex + 1) + exportStatement + content.slice(lineEndIndex + 1)
+		// content = content.slice(0, lineEndIndex + 1) + exportStatement + content.slice(lineEndIndex + 1)
 
 		fs.writeFileSync(storeIndexPath, content, 'utf8')
 		console.log(chalk.green(`✓ Store 主文件已更新`))
@@ -197,6 +249,8 @@ program
 	.version('1.0.0')
 	.description('Vue 模块生成器 - 快速创建视图、路由、Store 和 API 文件')
 	.option('-n, --name <name>', '模块名称')
+	.option('-d, --directory <path>', '指定生成目录，相对于项目根目录 (默认: src)')
+	.option('-t, --type <type>', `指定生成的模板类型 (${TEMPLATE_TYPES.join('|')})`, 'all')
 	.parse(process.argv)
 
 const options = program.opts()
@@ -204,6 +258,14 @@ const options = program.opts()
 // 主函数
 async function main() {
 	let moduleName = options.name
+	const { directory, type } = options
+
+	// 验证模板类型
+	if (type && !TEMPLATE_TYPES.includes(type)) {
+		console.error(chalk.red(`❌ 无效的模板类型: ${type}`))
+		console.log(chalk.yellow(`有效的模板类型: ${TEMPLATE_TYPES.join(', ')}`))
+		process.exit(1)
+	}
 
 	// 如果没有提供名称，则提示用户输入
 	if (!moduleName) {
@@ -213,13 +275,28 @@ async function main() {
 				name: 'name',
 				message: '请输入模块名称 (如: UserManagement):',
 				validate: input => input.trim() !== '' || '模块名称不能为空'
+			},
+			{
+				type: 'input',
+				name: 'directory',
+				message: '请输入生成目录 (相对于项目根目录，留空使用默认值 src):',
+				default: directory || ''
+			},
+			{
+				type: 'list',
+				name: 'type',
+				message: '请选择要生成的模板类型:',
+				choices: TEMPLATE_TYPES,
+				default: type || 'all'
 			}
 		])
 		moduleName = answers.name
+		options.directory = answers.directory || directory
+		options.type = answers.type || type
 	}
 
 	// 生成模块
-	await generateModule(moduleName)
+	await generateModule(moduleName, options)
 }
 
 // 执行主函数
