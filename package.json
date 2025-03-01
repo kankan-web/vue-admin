@@ -9,7 +9,8 @@
 		"preview": "vite preview --config scripts/config/vite.config.ts",
 		"commit": "git-cz",
 		"prepare": "husky install",
-		"lint": "eslint --config eslint.config.js"
+		"lint": "eslint --config eslint.config.js",
+		"generate": "node scripts/template/generate.js"
 	},
 	"dependencies": {
 		"@element-plus/icons-vue": "^2.3.1",
@@ -30,13 +31,17 @@
 		"@types/node": "^22.13.7",
 		"@vitejs/plugin-vue": "^4.5.2",
 		"@vitejs/plugin-vue-jsx": "^3.1.0",
+		"chalk": "^5.4.1",
+		"commander": "^13.1.0",
 		"commitizen": "4.3.0",
 		"cz-conventional-changelog": "3.3.0",
 		"eslint": "^9.21.0",
 		"eslint-plugin-prettier": "^5.2.3",
 		"eslint-plugin-vue": "^9.32.0",
+		"fs-extra": "^11.3.0",
 		"globals": "^16.0.0",
 		"husky": "^9.1.7",
+		"inquirer": "^12.4.2",
 		"lint-staged": "^15.4.3",
 		"mockjs": "^1.1.0",
 		"prettier": "^3.3.3",

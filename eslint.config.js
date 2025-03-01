@@ -23,7 +23,8 @@ export default [
 	},
 	{
 		rules: {
-			'vue/multi-word-component-names': 'off'
+			'vue/multi-word-component-names': 'off',
+			'@typescript-eslint/no-require-imports': 'off' // 禁用此规则
 		}
 	},
 	{ ignores: ['dist/**', 'node_modules/**', '.commitlintrc.js', 'types/**'] }
