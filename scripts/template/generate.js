@@ -87,9 +87,9 @@ async function generateModule(name, options) {
 
 		// 创建视图文件
 		if (shouldGenerateAll || type === 'view') {
-			const viewDir = path.join(PATHS.views, moduleName)
-			fs.ensureDirSync(viewDir)
-			fs.writeFileSync(path.join(viewDir, `index.vue`), viewTemplate(moduleName))
+			const viewDir = path.join(PATHS.views, moduleName) // 生成视图文件目录
+			fs.ensureDirSync(viewDir) // 确保目录存在
+			fs.writeFileSync(path.join(viewDir, `index.vue`), viewTemplate(moduleName)) // 创建视图文件
 			console.log(chalk.green(`✓ 视图文件已创建: ${path.relative(PROJECT_ROOT, viewDir)}/index.vue`))
 		}
 
@@ -117,11 +117,11 @@ async function generateModule(name, options) {
 			updateRouterIndex(name.toLowerCase(), directory)
 		}
 
-		// 只有在生成全部或store时才更新Store主文件
-		if (shouldGenerateAll || type === 'store') {
-			// 更新 Store 主文件，自动导入新模块
-			updateStoreIndex(name.toLowerCase(), directory)
-		}
+		// // 只有在生成全部或store时才更新Store主文件，【有需要才执行】
+		// if (shouldGenerateAll || type === 'store') {
+		// 	// 更新 Store 主文件，自动导入新模块
+		// 	updateStoreIndex(name.toLowerCase(), directory)
+		// }
 
 		console.log(chalk.green.bold(`\n✅ ${moduleName} 模块创建成功！`))
 		console.log(chalk.yellow(`提示: 请检查路由和 Store 的主文件，确保模块已正确导入`))
@@ -135,6 +135,7 @@ function updateRouterIndex(moduleName, directory) {
 	const routerDir = directory ? path.join(PROJECT_ROOT, directory, 'router') : path.join(PROJECT_ROOT, 'src/router')
 	const routerIndexPath = path.join(routerDir, 'index.ts')
 
+	// 检查路由主文件是否存在
 	if (!fs.existsSync(routerIndexPath)) {
 		console.log(
 			chalk.yellow(`⚠️ 未找到路由主文件，请手动导入路由模块: ${path.relative(PROJECT_ROOT, routerDir)}/modules/${moduleName}.ts`)
@@ -200,49 +201,49 @@ function updateRouterIndex(moduleName, directory) {
 	}
 }
 
-// 更新 Store 主文件
-function updateStoreIndex(moduleName, directory) {
-	const storeDir = directory ? path.join(PROJECT_ROOT, directory, 'stores') : path.join(PROJECT_ROOT, 'src/stores')
-	const storeIndexPath = path.join(storeDir, 'index.ts')
+// // 更新 Store 主文件，【有需要才执行】
+// function updateStoreIndex(moduleName, directory) {
+// 	const storeDir = directory ? path.join(PROJECT_ROOT, directory, 'stores') : path.join(PROJECT_ROOT, 'src/stores')
+// 	const storeIndexPath = path.join(storeDir, 'index.ts')
 
-	if (!fs.existsSync(storeIndexPath)) {
-		console.log(
-			chalk.yellow(
-				`⚠️ 未找到 Store 主文件，请手动导出 Store 模块: ${path.relative(PROJECT_ROOT, storeDir)}/modules/${moduleName}.ts`
-			)
-		)
-		return
-	}
+// 	if (!fs.existsSync(storeIndexPath)) {
+// 		console.log(
+// 			chalk.yellow(
+// 				`⚠️ 未找到 Store 主文件，请手动导出 Store 模块: ${path.relative(PROJECT_ROOT, storeDir)}/modules/${moduleName}.ts`
+// 			)
+// 		)
+// 		return
+// 	}
 
-	try {
-		let content = fs.readFileSync(storeIndexPath, 'utf8')
+// 	try {
+// 		let content = fs.readFileSync(storeIndexPath, 'utf8')
 
-		// 检查是否已导出
-		if (content.includes(`from './modules/${moduleName}'`)) {
-			console.log(chalk.yellow(`⚠️ Store 模块 ${moduleName} 似乎已导出，跳过更新`))
-			return
-		}
+// 		// 检查是否已导出
+// 		if (content.includes(`from './modules/${moduleName}'`)) {
+// 			console.log(chalk.yellow(`⚠️ Store 模块 ${moduleName} 似乎已导出，跳过更新`))
+// 			return
+// 		}
 
-		// 查找最后一个导出语句
-		const lastExportIndex = content.lastIndexOf('export')
-		if (lastExportIndex === -1) {
-			console.log(chalk.yellow(`⚠️ 无法确定导出语句位置，请手动导出 Store 模块`))
-			return
-		}
+// 		// 查找最后一个导出语句
+// 		const lastExportIndex = content.lastIndexOf('export')
+// 		if (lastExportIndex === -1) {
+// 			console.log(chalk.yellow(`⚠️ 无法确定导出语句位置，请手动导出 Store 模块`))
+// 			return
+// 		}
 
-		// 找到该行末尾
-		// const lineEndIndex = content.indexOf('\n', lastExportIndex)
-		// const exportStatement = `export { use${capitalize(moduleName)}Store } from './modules/${moduleName}'\n`
+// 		// 找到该行末尾
+// 		// const lineEndIndex = content.indexOf('\n', lastExportIndex)
+// 		// const exportStatement = `export { use${capitalize(moduleName)}Store } from './modules/${moduleName}'\n`
 
-		// 插入导出语句
-		// content = content.slice(0, lineEndIndex + 1) + exportStatement + content.slice(lineEndIndex + 1)
+// 		// 插入导出语句
+// 		// content = content.slice(0, lineEndIndex + 1) + exportStatement + content.slice(lineEndIndex + 1)
 
-		fs.writeFileSync(storeIndexPath, content, 'utf8')
-		console.log(chalk.green(`✓ Store 主文件已更新`))
-	} catch (error) {
-		console.log(chalk.yellow(`⚠️ 更新 Store 主文件时出错，请手动导出 Store 模块`), error)
-	}
-}
+// 		fs.writeFileSync(storeIndexPath, content, 'utf8')
+// 		console.log(chalk.green(`✓ Store 主文件已更新`))
+// 	} catch (error) {
+// 		console.log(chalk.yellow(`⚠️ 更新 Store 主文件时出错，请手动导出 Store 模块`), error)
+// 	}
+// }
 
 // 设置命令行参数
 program
