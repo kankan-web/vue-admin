@@ -16,13 +16,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, reactive } from 'vue'
-import { getUserDepartment } from '@/api/user'
-
-interface Department {
-	id: string
-	name: string
-	children?: Department[]
-}
+import { getUserDepartment, type Department } from '@/api/user'
 
 onMounted(() => {
 	getTreeFilter()
@@ -36,11 +30,17 @@ const initParam = reactive({ departmentId: '' })
 // 获取 treeFilter 数据
 // 当 proTable 的 requestAuto 属性为 false，不会自动请求表格数据，等待 treeFilter 数据回来之后，更改 initParam.departmentId 的值，才会触发请求 proTable 数据
 const treeFilterData = ref<Department[]>([])
-const getTreeFilter = () => {
-	const { data } = getUserDepartment()
-	treeFilterData.value = data
-	console.log('data', data)
-	initParam.departmentId = treeFilterData.value[1].id //默认第一项设置
+const getTreeFilter = async () => {
+	try {
+		const { data } = await getUserDepartment()
+		treeFilterData.value = data
+		console.log('data', data)
+		if (data && data.length > 1) {
+			initParam.departmentId = treeFilterData.value[1].id //默认第一项设置
+		}
+	} catch (error) {
+		console.error('获取部门数据失败:', error)
+	}
 }
 // 树形筛选切换
 const changeTreeFilter = (val: string) => {
