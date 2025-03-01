@@ -44,6 +44,6 @@
 <p align="center">如果有任何疑问，可直接微信联系我，秒回。</p>
 <h3 align='center'>个人微信</h3>
 
-<p style='display:flex;justify-content: center;align-items: center'>
-<img alt="logo" style='display:flex;text-align:left' src="./src/assets/image/wx.png" width="400">
+<p style='display:flex;justify-content: center;align-items: center' align="center">
+<img alt="logo" style='display:flex;text-align:center' src="./src/assets/image/wx.png" width="400">
 </p>
