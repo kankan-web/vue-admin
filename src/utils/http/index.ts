@@ -1,105 +1,187 @@
-import axios, { AxiosError, AxiosInstance } from 'axios'
-import { TAxiosOption, TAxiosRequestConfig, TAxiosResopnse } from './type'
-import { showFullScreenLoading, hideFullScreenLoading } from '@/components/mLoading/fullScreen'
-import { useUserStore } from '@/stores/modules/user'
+import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import { TAxiosRequestConfig, TAxiosResponseConfig, TAxiosError } from './type'
+import {
+	defaultConfig,
+	addTokenToHeader,
+	showLoading,
+	hideLoading,
+	checkStatus,
+	handleNetworkError,
+	handleBusinessError
+} from './config'
 import { AxiosCanceler } from './axiosCancel'
-import { ResultEnum } from '@/enums/httpEnums'
-import { checkStatus } from '@/utils/http/checkStatus'
-import { ElMessage } from 'element-plus'
-// import router from "@/routers";
 
-const axiosCanceler = new AxiosCanceler()
-const config: TAxiosOption = {
-	baseURL: import.meta.env.VITE_API_URL,
-	timeout: 60 * 1000,
-	headers: {
-		Accept: 'application/json,text/plain,*/*'
-	},
-	isShowErrorMsg: false,
-	loading: true
-}
+/**
+ * @description 请求封装
+ * @example
+ * const res = await http.get('/api/users')
+ * const res = await http.post('/api/users', { name: 'John' })
+ * const res = await http.put('/api/users', { name: 'John' })
+ * const res = await http.delete('/api/users', { name: 'John' })
+ * const res = await http.download('/api/users', { name: 'John' })
+ * const res = await http.upload('/api/users', { name: 'John' })
+ * @example 取消请求
+ * http.cancelRequest('/api/users') // 取消指定URL的请求
+ * http.cancelAllRequests() // 取消所有请求
+ * http.showLoading() // 显示加载动画
+ * http.hideLoading() // 隐藏加载动画
+ */
+
+// 创建取消请求实例
+export const axioCanceler = new AxiosCanceler()
 
 class TRequest {
-	instance: AxiosInstance
-	constructor(config: TAxiosOption) {
-		this.instance = axios.create(config)
-		/**
-		 * @description 请求拦截器
-		 * 客户端发送请求 -> [请求拦截器] -> 服务器
-		 * token校验(JWT) : 接受服务器返回的 token,存储到 vuex/pinia/本地储存当中
-		 */
-		this.instance.interceptors.request.use(
-			(config: TAxiosRequestConfig) => {
-				//当前重复请求不需要取消，在api服务中通过指定第三个参数：{cancel:true} 来决定是否取消
-				config.cancel ??= true
-				if (config.cancel) axiosCanceler.addPending(config)
-				//当前请求不需要显示loading，在api服务中通过指定第三个参数：{loading:false} 来决定是否显示
-				config.loading ??= true
-				if (config.loading) showFullScreenLoading()
-				//添加token
-				const { token } = useUserStore()
-				if (token) config.headers.Authorization = token
-				return config
-			},
-			(error: AxiosError) => {
-				return Promise.reject(error)
-			}
-		)
-		/**
-		 * @description 响应拦截器
-		 *  服务器换返回信息 -> [拦截统一处理] -> 客户端JS获取到信息
-		 */
-		this.instance.interceptors.response.use(
-			(response: TAxiosResopnse) => {
-				const { data, config } = response
-				const useStore = useUserStore()
-				axiosCanceler.removePending(config)
-				if (config.loading) hideFullScreenLoading()
-				//登录失败
-				if (data.code === ResultEnum.OVERDUE) {
-					useStore.setToken('')
-					//TODO:跳转至登录页面
-					// router.push(LOGIN_URL)
-					ElMessage.error(data.msg)
-					return Promise.reject(data)
+	/* axios实例 */
+	private static axiosInstance: AxiosInstance = Axios.create(defaultConfig)
+
+	constructor() {
+		this.httpInterceptorsRequest()
+		this.httpInterceptorsResponse()
+	}
+
+	/**
+	 * @description 批量取消请求
+	 * @example onUnMount(() => {http.cancelAllRequests()})
+	 */
+	public cancelAllRequests(): void {
+		axioCanceler.removeAllPending()
+	}
+
+	/**
+	 * @description 取消指定 URL 的请求
+	 * @param url
+	 * @example http.cancelRequest('/api/users');
+	 */
+	public cancelRequest(url: string): void {
+		axioCanceler.removeByUrl(url)
+	}
+
+	/** 请求拦截 */
+	private httpInterceptorsRequest(): void {
+		TRequest.axiosInstance.interceptors.request.use(
+			(config: TAxiosRequestConfig): Promise<any> => {
+				//1. 针对单个请求的自定义回调
+				if (typeof config.beforeRequestCallback === 'function') {
+					config = config.beforeRequestCallback(config)
 				}
-				//全局错误信息拦截（防止下载文件的时候返回数据流，没有code直接报错）
-				if (data.code && data.code !== ResultEnum.SUCCESS) {
-					ElMessage.error(data.msg)
-					return Promise.reject(data)
+				//2. 显示加载动画
+				showLoading(config)
+				//3. 添加取消请求
+				if (config.cancel) {
+					axioCanceler.addPending(config)
 				}
-				//成功请求（在页面上非特殊情况，否则不用处理失败逻辑）
-				return data
+				//4. 添加token到请求头
+				addTokenToHeader(config)
+				//5. 请求之前
+				return Promise.resolve(config)
 			},
-			async (error: AxiosError) => {
-				const { response } = error
-				hideFullScreenLoading()
-				//请求超时&&网络错误单独判断，没有response
-				if (error.message.includes('timeout')) ElMessage.error('请求超时！请您稍后再试')
-				if (error.message.includes('Network Error')) ElMessage.error('网络错误！请您稍后再试')
-				// 服务器结果状态码
-				if (response) checkStatus(response.status)
-				// 服务器结果都没有返回(可能服务器错误可能客户端断网)，断网处理：可以跳转到断网页面
-				// if(!window.navigator.onLine) router.push('/500')
+			(error: TAxiosError) => {
+				const config = error.config
+				//6.隐藏loading
+				hideLoading(config)
 				return Promise.reject(error)
 			}
 		)
 	}
 
-	get<T, U>(url: string, data?: U, config = {}): Promise<T> {
-		return this.instance.get(url, { params: data, ...config })
+	/** 响应拦截 */
+	private httpInterceptorsResponse(): void {
+		TRequest.axiosInstance.interceptors.response.use(
+			(response: TAxiosResponseConfig) => {
+				const { config, data } = response
+
+				// 执行响应前回调
+				if (typeof config.beforeResponseCallback === 'function') {
+					config.beforeResponseCallback(config)
+				}
+
+				// 隐藏加载动画
+				hideLoading(config)
+
+				// 处理业务错误
+				if (handleBusinessError(data)) {
+					return Promise.reject(data)
+				}
+
+				// 请求完成后，删除对应的cancelToken
+				if (config.cancel) {
+					axioCanceler.removePending(config)
+				}
+
+				// 响应成功
+				return response.data
+			},
+			(error: TAxiosError) => {
+				// 响应错误
+				const config = error.config
+
+				// 隐藏加载动画
+				if (config) {
+					hideLoading(config)
+				}
+
+				// 请求出错时，也需要删除对应的cancelToken
+				if (error.config && error.config.cancel) {
+					axioCanceler.removePending(error.config)
+				}
+
+				// 标记取消请求
+				error.isCancelRequest = Axios.isCancel(error)
+
+				// 处理网络错误
+				if (!error.isCancelRequest) {
+					handleNetworkError(error)
+				}
+
+				// 处理HTTP状态码错误
+				if (error.response) {
+					checkStatus(error.response.status)
+				}
+
+				// 处理断网情况
+				if (!window.navigator.onLine) {
+					console.log('网络已断开，请检查网络连接')
+					// router.replace('/500')
+				}
+
+				return Promise.reject(error)
+			}
+		)
 	}
-	post<T, U>(url: string, data?: U, config = {}): Promise<T> {
-		return this.instance.post(url, data, config)
+
+	/**常用方法封装 */
+	public post<T, P>(url: string, params?: AxiosRequestConfig<P>, config?: TAxiosRequestConfig): Promise<T> {
+		return TRequest.axiosInstance.post(url, params, config)
 	}
-	put<T, U>(url: string, data?: U, config = {}): Promise<T> {
-		return this.instance.put(url, data, config)
+
+	public get<T, P>(url: string, params?: AxiosRequestConfig<P>, config?: TAxiosRequestConfig): Promise<T> {
+		return TRequest.axiosInstance.get(url, { params, ...config })
 	}
-	delete<T, U>(url: string, data?: U, config = {}): Promise<T> {
-		return this.instance.delete(url, { params: data, ...config })
+
+	public put<T, P>(url: string, params?: AxiosRequestConfig<P>, config?: TAxiosRequestConfig): Promise<T> {
+		return TRequest.axiosInstance.put(url, params, config)
 	}
-	download<T, U>(url: string, data?: U, config = {}): Promise<T> {
-		return this.instance.post(url, data, { ...config, responseType: 'blob' })
+
+	public delete<T, P>(url: string, params?: AxiosRequestConfig<P>, config?: TAxiosRequestConfig): Promise<T> {
+		return TRequest.axiosInstance.delete(url, { params, ...config })
+	}
+
+	public download<T, P>(url: string, params?: AxiosRequestConfig<P>, config?: TAxiosRequestConfig): Promise<T> {
+		return TRequest.axiosInstance.post(url, params, {
+			...config,
+			responseType: 'blob'
+		})
+	}
+
+	public upload<T>(url: string, formData: FormData, config?: TAxiosRequestConfig): Promise<T> {
+		return TRequest.axiosInstance.post(url, formData, {
+			...config,
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				...((config?.headers as Record<string, unknown>) || {})
+			}
+		})
 	}
 }
-export default new TRequest(config)
+
+export const http = new TRequest()

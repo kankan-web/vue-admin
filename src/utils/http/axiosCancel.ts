@@ -5,6 +5,7 @@ const pendingMap = new Map<string, AbortController>()
 
 //序列化参数，确保对象属性顺序一致
 const sortedStringify = (obj: unknown) => {
+	if (!obj) return ''
 	return qs.stringify(obj, {
 		arrayFormat: 'repeat',
 		sort: (a, b) => a.localeCompare(b)
@@ -38,11 +39,22 @@ export class AxiosCanceler {
 			}
 		}
 	}
+
 	//移除所有请求
 	removeAllPending() {
 		pendingMap.forEach(controller => {
 			controller.abort()
 		})
 		pendingMap.clear()
+	}
+
+	//根据URL移除请求
+	removeByUrl(url: string) {
+		pendingMap.forEach((controller, pendingUrl) => {
+			if (pendingUrl.includes(url)) {
+				controller.abort()
+				pendingMap.delete(pendingUrl)
+			}
+		})
 	}
 }
