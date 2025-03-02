@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/view/home/index.vue'
 import Layout from '@/layout/index.vue'
+import { start, close } from '@/utils/nprogress'
+
 const routes: RouteRecordRaw[] = [
 	{
 		path: '/login',
@@ -45,5 +47,12 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
 	routes,
 	history: createWebHistory()
+})
+router.beforeEach((to, from, next) => {
+	start()
+	next()
+})
+router.afterEach(() => {
+	close()
 })
 export default router

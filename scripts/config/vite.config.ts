@@ -147,10 +147,10 @@ export default defineConfig(({ mode }) => {
 				// 自定义生成的类名
 				generateScopedName: mode === 'development' ? '[name]__[local]__[hash:base64:5]' : '[hash:base64:8]'
 			}
-		},
-		// 优化依赖
-		optimizeDeps: {
-			include: ['dhtmlx-gantt']
 		}
+		// // 优化依赖
+		// optimizeDeps: {
+		// 	include: ['dhtmlx-gantt']
+		// }
 	}
 })

@@ -1,4 +1,4 @@
-import request from '@/utils/http/index'
+import { http } from '@/utils/http/index'
 
 // 定义API响应类型
 export interface ApiResponse<T> {
@@ -16,5 +16,5 @@ export interface Department {
 
 // 获取用户部门列表
 export const getUserDepartment = (): Promise<ApiResponse<Department[]>> => {
-	return request.get('/user/department')
+	return http.get('/user/department')
 }
