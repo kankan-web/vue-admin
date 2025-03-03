@@ -19,7 +19,7 @@ export default defineConfig({
         items: [
           { text: '为什么要写这个项目', link: '/page/01why' },
           { text: '使用pnpm管理包', link: '/page/02pnpm' },
-          { text: '规范化处理', link: '/page/03eslint' },
+          { text: '基础环境搭建', link: '/page/03eslint' },
           { text: '自动化生成项目基本模版', link: '/page/04template' },
           { text: 'Pinia', link: '/page/05pinia' },
           { text: 'axios二次封装', link: '/page/07axios' },
