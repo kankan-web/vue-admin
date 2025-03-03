@@ -30,6 +30,7 @@
 		"@commitlint/config-conventional": "^19.7.1",
 		"@eslint/js": "^9.21.0",
 		"@types/node": "^22.13.7",
+		"@vitejs/plugin-legacy": "^6.0.2",
 		"@vitejs/plugin-vue": "^4.5.2",
 		"@vitejs/plugin-vue-jsx": "^3.1.0",
 		"chalk": "^5.4.1",
@@ -48,6 +49,7 @@
 		"prettier": "^3.3.3",
 		"sass": "^1.70.0",
 		"sass-loader": "^14.0.0",
+		"terser": "^5.39.0",
 		"typescript": "^5.2.2",
 		"typescript-eslint": "^8.24.1",
 		"unplugin-auto-import": "^0.18.2",
@@ -78,5 +80,13 @@
 		"*.{ts,tsx,js,json,html,yml,css,less,scss,md}": [
 			"prettier --write"
 		]
-	}
+	},
+	"browserslist": [
+		"Android 4.1",
+		"iOS 7.1",
+		"Chrome > 31",
+		"ff > 31",
+		"ie >= 8",
+		"last 2 versions"
+	]
 }

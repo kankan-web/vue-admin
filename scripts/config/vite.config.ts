@@ -21,6 +21,8 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 //mock vite-plugin-mock
 import { viteMockServe } from 'vite-plugin-mock'
+// 兼容性处理
+import legacy from '@vitejs/plugin-legacy'
 
 // const pathSrc = path.resolve(__dirname, './src')
 const __filename = fileURLToPath(import.meta.url)
@@ -111,6 +113,13 @@ export default defineConfig(({ mode }) => {
 			createSvgIconsPlugin({
 				iconDirs: [pathResolve('src/assets/svg')],
 				symbolId: 'icon-[name]'
+			}),
+			legacy({
+				targets: ['ie >= 11', 'chrome 52', 'Android 4.1', 'iOS 7.1'],
+				modernPolyfills: true,
+				additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+				renderLegacyChunks: true,
+				polyfills: true
 			}),
 			isDev &&
 				viteMockServe({
