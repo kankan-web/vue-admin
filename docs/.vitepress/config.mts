@@ -6,6 +6,8 @@ export default defineConfig({
   description: "后台管理基础框架",
   lastUpdated: true,
   base: '/vue-admin/',  // 替换为你的GitHub仓库名称
+  outDir: 'docs/.vitepress/dist',
+  cleanUrls: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

@@ -5,7 +5,7 @@ name: Deploy VitePress site to Pages
 on:
   # 在针对 `main` 分支的推送上运行
   push:
-    branches: [gh-pages]  # 从gh-pages改为main和master
+    branches: [gh-pages]  # 修改为main和master分支
 
   # 允许你从 Actions 选项卡手动运行此工作流程
   workflow_dispatch:
@@ -49,8 +49,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
-          branch: gh-pages
-          clean: true
 
   # 部署工作
   deploy:

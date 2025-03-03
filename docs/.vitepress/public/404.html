@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found</title>
+  <script>
+    // 获取当前URL路径
+    const path = window.location.pathname;
+    // 获取当前URL查询参数
+    const query = window.location.search;
+    // 获取当前URL哈希值
+    const hash = window.location.hash;
+    
+    // 基础路径，与VitePress配置中的base保持一致
+    const basePath = '/vue-admin/';
+    
+    // 如果当前路径不是以基础路径开头，则重定向到基础路径
+    if (!path.startsWith(basePath)) {
+      window.location.replace(basePath);
+    } else {
+      // 否则，重定向到基础路径下的index.html，并保留路径、查询参数和哈希值
+      const redirectPath = basePath + 'index.html' + query + hash;
+      window.location.replace(redirectPath);
+    }
+  </script>
+</head>
+<body>
+  <h1>404 - 页面未找到</h1>
+  <p>正在重定向到首页...</p>
+</body>
+</html> 
