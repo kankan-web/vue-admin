@@ -20,24 +20,22 @@
 
 本项目是基于**pnpm，vue3，vite**，对 element-plus 组件库做的二次封装，主要封装的功能点：自动生成项目模块代码 + pinia + 数据持久化 + 路由动画 + axios 二次封装 + less sass 变量函数处理 + viewport 适配方案等等
 
-详情可查看项目文档：https://kankan-web.github.io/vue-admin/
-
 主要功能点如下：
 
-- [x] 使用 pnpm 管理包
-- [x] Eslint + prettier + husky + commitlint 规范化处理
-- [x] 自动化生成项目基本模版
-- [x] Pinia 状态管理库
-- [x] 持久化存储插件封装
-- [x] 路由动画的封装
-- [x] 引入 Nprogress
-- [x] 支持 history 模式
-- [x] axios 二次封装
-- [x] viewport 适配方案
-- [x] less sass 变量，函数的处理
-- [x] 配置多环境变量
-- [x] 链式操作符
-- [x] 入口加载动画
+- 使用 pnpm 管理包
+- Eslint + prettier + husky + commitlint 规范化处理
+- 自动化生成项目基本文件
+- Pinia 状态管理库
+- 持久化存储插件封装
+- 路由动画的封装
+- 引入 Nprogress
+- 支持 history 模式
+- axios 二次封装
+- viewport 适配方案
+- less sass 变量，函数的处理
+- 配置多环境变量
+- 链式操作符
+- 入口加载动画
 
 如果对你有帮助送我一颗珍贵的小星星（づ￣ 3 ￣）づ ╭❤ ～
 

@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: 开始
-      link: /markdown-examples
+      link: /about
     - theme: alt
       text: 访问Github
       link: https://github.com/kankan-web/vue-admin
